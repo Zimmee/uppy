@@ -171,6 +171,19 @@ module.exports = class AwsS3 extends BasePlugin {
     })
 
     const numberOfFiles = fileIDs.length
+    
+      Promise.allSettled = Promise.allSettled || ((promises) => Promise.all(
+    promises.map(p => p
+        .then(value => ({
+            status: "fulfilled",
+            value
+        }))
+        .catch(reason => ({
+            status: "rejected",
+            reason
+        }))
+    )
+));
 
     return Promise.allSettled(fileIDs.map((id, index) => {
       paramsPromises[id] = getUploadParameters(this.uppy.getFile(id))
